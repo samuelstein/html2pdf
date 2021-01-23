@@ -22,7 +22,7 @@ public class Main {
             if (Objects.nonNull(args) && args.length > 0) {
                 var start = Instant.now();
                 final var url = new URL(args[0]);
-                generatePDFFromHTML(fetchHtml(url), url);
+                generatePDFFromHTML(url);
                 System.out.println("html to pdf conversion done in: " + Duration.between(start, Instant.now()).getSeconds() + "s");
             } else {
                 System.err.println("no url given. good bye...");
@@ -40,7 +40,7 @@ public class Main {
         return new BufferedInputStream(url.openStream());
     }
 
-    private static void generatePDFFromHTML(InputStream inputStream, URL url) throws IOException {
+    private static void generatePDFFromHTML(URL url) throws IOException {
         var start = Instant.now();
         ConverterProperties properties = new ConverterProperties();
         properties.setBaseUri(url.getProtocol() + "://" + url.getHost());
@@ -50,7 +50,7 @@ public class Main {
 
         properties.setMediaDeviceDescription(mediaDeviceDescription);
 
-        HtmlConverter.convertToPdf(inputStream, new FileOutputStream(getName(url)), properties);
+        HtmlConverter.convertToPdf(fetchHtml(url), new FileOutputStream(getName(url)), properties);
         System.out.println("pdf generation done in: " + Duration.between(start, Instant.now()).getSeconds() + "s");
     }
 
