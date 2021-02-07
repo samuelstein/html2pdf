@@ -40,7 +40,7 @@ public class Main {
         return new BufferedInputStream(url.openStream());
     }
 
-    private static void generatePDFFromHTML(URL url) throws IOException {
+    static void generatePDFFromHTML(URL url) throws IOException {
         var start = Instant.now();
         ConverterProperties properties = new ConverterProperties();
         properties.setBaseUri(url.getProtocol() + "://" + url.getHost());
@@ -54,7 +54,10 @@ public class Main {
         System.out.println("pdf generation done in: " + Duration.between(start, Instant.now()).getSeconds() + "s");
     }
 
-    private static String getName(URL url) {
+    static String getName(URL url) {
+        if (url.getPath().isBlank()) {
+            return url.getHost() + ".pdf";
+        }
         return url.getPath().substring(url.getPath().lastIndexOf("/") + 1) + ".pdf";
     }
 }
